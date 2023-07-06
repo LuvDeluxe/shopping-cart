@@ -1,10 +1,18 @@
 import items from './items.json'
+import currencyFormatter from './utilities/currencyFormatter'
+import { addItemsToCart } from './cart.js'
 
 const imageGeneralSrc = "https://dummyimage.com/420x260/"
 const storeItemTemplate = document.querySelector('#store-item-template')
 const itemContainer = document.querySelector("[data-store-container]")
 
 export function setupStore() {
+  document.addEventListener('click', event => {
+    if (event.target.matches("[data-add-to-cart]")) {
+      const id = event.target.closest('[data-store-item]').dataset.itemId
+      addItemsToCart(parseInt(id))
+    }
+  })
   items.forEach(renderStoreItem)
 }
 
@@ -21,8 +29,7 @@ function renderStoreItem(item) {
   category.innerText = item.category
 
   const itemPrice = storeItem.querySelector("[data-price]")
-  item.priceCents = (item.priceCents / 100).toFixed(2) + "$"
-  itemPrice.innerText = item.priceCents
+  itemPrice.innerText = currencyFormatter(item.priceCents / 100)
 
   const imageColor = storeItem.querySelector("[data-image]")
   imageColor.src = imageGeneralSrc + item.imageColor
