@@ -59,11 +59,11 @@ function removeCartItemHandler(event) {
 
 function shoppingCartVisibility() {
   if (shoppingCart.length === 0) {
-    sideCheckoutContainer.style.visibility = "hidden"
-    shoppingCartIcon.style.visibility = "hidden"
+    sideCheckoutContainer.style.display = "none"
+    shoppingCartIcon.style.display = "none"
   } else if (shoppingCart.length > 0) {
-    sideCheckoutContainer.style.visibility = "visible"
-    shoppingCartIcon.style.visibility = "visible"
+    sideCheckoutContainer.style.display = "block"
+    shoppingCartIcon.style.display = "block"
   }
 }
 
