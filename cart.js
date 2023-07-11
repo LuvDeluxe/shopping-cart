@@ -24,6 +24,8 @@ export function addItemsToCart(id) {
   shoppingCart.push({ id: id, quantity: 1 })
   renderSideCart()
   shoppingCartVisibility()
+  toggleLeftRail = true
+  sideCheckoutContainer.style.display = "block"
 }
 
 function renderSideCart() {
