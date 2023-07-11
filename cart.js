@@ -7,16 +7,23 @@ const sideCheckoutContainer = document.querySelector("[data-item-holder]")
 const cartItemTemplate = document.querySelector('#side-item-template')
 const imageInBasketPath = "https://dummyimage.com/210x130/"
 let shoppingCart = []
+let toggleLeftRail = true
 
 export function setupShoppingCart() {
   shoppingCartIcon.addEventListener('click', () => {
-    sideCheckoutContainer.classList.toggle('invisible')
+    if (toggleLeftRail) {
+      sideCheckoutContainer.style.display = "none"
+    } else {
+      sideCheckoutContainer.style.display = "block"
+    }
+    toggleLeftRail = !toggleLeftRail
   })
 }
 
 export function addItemsToCart(id) {
   shoppingCart.push({ id: id, quantity: 1 })
   renderSideCart()
+  shoppingCartVisibility()
 }
 
 function renderSideCart() {
@@ -45,4 +52,17 @@ function removeCartItemHandler(event) {
     }
     itemSide.remove()
   }
+  shoppingCartVisibility()
 }
+
+function shoppingCartVisibility() {
+  if (shoppingCart.length === 0) {
+    sideCheckoutContainer.style.visibility = "hidden"
+    shoppingCartIcon.style.visibility = "hidden"
+  } else if (shoppingCart.length > 0) {
+    sideCheckoutContainer.style.visibility = "visible"
+    shoppingCartIcon.style.visibility = "visible"
+  }
+}
+
+shoppingCartVisibility()
