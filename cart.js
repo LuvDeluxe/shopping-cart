@@ -5,9 +5,17 @@ const cartItemContainer = document.querySelector("[data-cart-items]")
 const shoppingCartIcon = document.querySelector("[data-cart]")
 const sideCheckoutContainer = document.querySelector("[data-item-holder]")
 const cartItemTemplate = document.querySelector('#side-item-template')
+const redCircleQuantity = document.querySelector(".red-circle-quantity")
+const priceTotal = document.querySelector("#totalPrice")
+const totalHolder = document.querySelector("[data-total]")
 const imageInBasketPath = "https://dummyimage.com/210x130/"
 let shoppingCart = []
 let toggleLeftRail = true
+let totalPrice = 0
+
+const totalPriceClone = priceTotal.content.cloneNode(true)
+const totalPriceHolder = totalPriceClone.querySelector('span')
+totalHolder.appendChild(totalPriceClone)
 
 export function setupShoppingCart() {
   shoppingCartIcon.addEventListener('click', () => {
@@ -64,6 +72,12 @@ function shoppingCartVisibility() {
   } else if (shoppingCart.length > 0) {
     sideCheckoutContainer.style.display = "block"
     shoppingCartIcon.style.display = "block"
+    redCircleQuantity.innerText = shoppingCart.length
+    totalPrice = 0
+    shoppingCart.forEach(entry => {
+      totalPrice += entry.quantity * (items.find(i => entry.id === i.id).priceCents / 100)
+    })
+    totalPriceHolder.innerText = currencyFormatter(totalPrice)
   }
 }
 
