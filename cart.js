@@ -75,7 +75,7 @@ function shoppingCartVisibility() {
     redCircleQuantity.innerText = shoppingCart.length
     totalPrice = 0
     shoppingCart.forEach(entry => {
-      totalPrice += entry.quantity * (items.find(i => entry.id === i.id).priceCents / 100)
+      totalPrice += items.find(i => entry.id === i.id).priceCents / 100
     })
     totalPriceHolder.innerText = currencyFormatter(totalPrice)
   }
