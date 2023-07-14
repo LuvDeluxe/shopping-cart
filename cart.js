@@ -29,11 +29,17 @@ export function setupShoppingCart() {
 }
 
 export function addItemsToCart(id) {
-  shoppingCart.push({ id: id, quantity: 1 })
+  const existingItem = shoppingCart.find(item => item.id === id)
+  if (existingItem) {
+    existingItem.quantity++
+  } else {
+    shoppingCart.push({ id: id, quantity: 1 })
+  }
   renderSideCart()
   shoppingCartVisibility()
   toggleLeftRail = true
   sideCheckoutContainer.style.display = "block"
+  localStorage.setItem('shoppingCart', JSON.stringify(shoppingCart))
 }
 
 function renderSideCart() {
@@ -42,10 +48,14 @@ function renderSideCart() {
     const cartItem = cartItemTemplate.content.cloneNode(true)
     const name = cartItem.querySelector("[data-name]")
     const price = cartItem.querySelector("[data-price-side]")
+    const quantity = cartItem.querySelector("[data-quantity]")
     const image = cartItem.querySelector("[data-image]")
     const removeItemFromCart = cartItem.querySelector("[data-remove-from-cart-button]")
     const item = items.find(i => entry.id === i.id)
     name.innerText = item.name
+    if (entry.quantity > 1) {
+      quantity.innerText = 'x' + entry.quantity
+    }
     price.innerText = currencyFormatter(item.priceCents / 100)
     image.src = `${imageInBasketPath}` + item.imageColor
     cartItemContainer.appendChild(cartItem)
@@ -63,6 +73,7 @@ function removeCartItemHandler(event) {
     itemSide.remove()
   }
   shoppingCartVisibility()
+  localStorage.setItem('shoppingCart', JSON.stringify(shoppingCart))
 }
 
 function shoppingCartVisibility() {
@@ -75,10 +86,17 @@ function shoppingCartVisibility() {
     redCircleQuantity.innerText = shoppingCart.length
     totalPrice = 0
     shoppingCart.forEach(entry => {
-      totalPrice += items.find(i => entry.id === i.id).priceCents / 100
+      totalPrice += items.find(i => entry.id === i.id).priceCents / 100 * entry.quantity
     })
     totalPriceHolder.innerText = currencyFormatter(totalPrice)
   }
+}
+
+const savedShoppingCart = localStorage.getItem('shoppingCart')
+if (savedShoppingCart) {
+  shoppingCart = JSON.parse(savedShoppingCart)
+  renderSideCart()
+  shoppingCartVisibility()
 }
 
 shoppingCartVisibility()
